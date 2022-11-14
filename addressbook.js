@@ -32,7 +32,6 @@ $(document).ready(function () {
     landline: "040 30 123 1211",
     address: "123 now here\nSome street\nMadhapur, Hyderabad 500033",
   });
-
   $("#addlink").click(function () {
     addForm();
   });
@@ -46,7 +45,6 @@ $(document).ready(function () {
   });
   $("#deletelink").click(function (e) {
     e.preventDefault();
-    console.log("removelink" + selected);
     removeDetails();
   });
   $("#addButton").click(function (e) {
@@ -55,12 +53,29 @@ $(document).ready(function () {
       submitingForm();
     }
   });
+  var reference = 0;
   $("#cancelButton").click(function () {
-    display(selected);
+    $("#nameWarning").text("");
+    $("#emailWarning").text("");
+    $("#mobileWarning").text("");
+    var passed = 0;
+    if (reference == 1) {
+      passed = selected;
+      reference = 0;
+    } else {
+      for (var p = 0; p < contactList.length; p++) {
+        if ($("#" + p).length) {
+          passed = p;
+          break;
+        }
+      }
+    }
+    display(passed);
   });
   for (let i = 0; i < contactList.length; i++) {
     displayList(contactList[i], i);
   }
+  display(0);
   function displayList(contact, i) {
     $("#contactBook").append("<li class='eachContact' ></li>");
     $("#contactBook").children().last().attr("id", i);
@@ -106,16 +121,19 @@ $(document).ready(function () {
     $("#addLandline").val(contactList[selected].landline);
     $("#addWebsite").val(contactList[selected].website);
     $("#addAddress").val(contactList[selected].address);
+    reference = 1;
     $("#editButton").click(function (e) {
       e.preventDefault();
-      if (
-        confirm(
-          "Are you sure you want to edit " +
-            contactList[selected].name +
-            "'s details"
-        )
-      ) {
-        editedDetailsAdding();
+      if (validate()) {
+        if (
+          confirm(
+            "Are you sure you want to edit " +
+              contactList[selected].name +
+              "'s details"
+          )
+        ) {
+          editedDetailsAdding();
+        }
       }
     });
   }
@@ -154,6 +172,14 @@ $(document).ready(function () {
         }
       }
     }
+    var passed = 0;
+    for (var p = 0; p < contactList.length; p++) {
+      if ($("#" + p).length) {
+        passed = p;
+        break;
+      }
+    }
+    display(passed);
   }
   function addForm() {
     $(".displayDetails").css("display", "none");
@@ -168,10 +194,10 @@ $(document).ready(function () {
     });
   }
   function submitingForm() {
-    var dummyLandline = "Not Provided";
-    var dummyWebsite = "Not Provided";
-    var dummyAddress = "Not Provided";
-    var dummyEmail = "not provided";
+    var dummyLandline = "NA";
+    var dummyWebsite = "NA";
+    var dummyAddress = "NA";
+    var dummyEmail = "NA";
     if ($("#addLandline").val() != "") {
       dummyLandline = $("#addLandline").val();
     }
@@ -192,24 +218,10 @@ $(document).ready(function () {
       landline: dummyLandline,
       address: dummyAddress,
     });
-    console.log(contactList);
     displayList(contactList[contactList.length - 1], contactList.length - 1);
     display(contactList.length - 1);
     $("#addingDetailsForm")[0].reset();
   }
-  $("#addName").change(function (e) {
-    e.preventDefault();
-    validate();
-  });
-  $("#addEmail").change(function (e) {
-    e.preventDefault();
-    validate();
-  });
-  $("#addMobile").keyup(function (e) {
-    e.preventDefault();
-    validate();
-  });
-
   function validate() {
     var nameBox = $("#addName").val();
     var emailBox = $("#addEmail").val();
@@ -217,7 +229,6 @@ $(document).ready(function () {
     var flag = 0;
     if (nameBox == "") {
       $("#nameWarning").text("Enter your name");
-      console.log(nameBox);
     } else {
       $("#nameWarning").text("");
       flag += 1;

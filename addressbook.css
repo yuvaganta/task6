@@ -157,15 +157,28 @@
     background-color: rgb(51,153,204);
     color: White;
     border: 2px solid rgb(51,153,204);
-    margin-left: 627px;
+    margin-left: 536px;
     width: 70px;
     height: 25px;
     margin-top:5px;
     cursor: pointer;
 
   }
+  #cancelButton{
+    background-color: rgb(51,153,204);
+    color: White;
+    border: 2px solid rgb(51,153,204);
+    margin-top:5px;
+    cursor: pointer;
+    width: 70px;
+    height: 25px;
+  }
   .subheads{
     font-weight: bold;
+  }
+  .buttondiv{
+    display: flex;
+    gap:20px;
   }
   .warnings{
     color:red;
